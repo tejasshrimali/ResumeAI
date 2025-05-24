@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Submit Job Description</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      /* Ensure the container takes full height but allows scrolling */
+      .main-container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+      }
+      /* Responsive card width */
+      .card {
+        width: 100%;
+        max-width: 600px; /* Limit max width for larger screens */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      /* Responsive textarea */
+      #job_desc {
+        min-height: 150px; /* Minimum height for mobile */
+        resize: vertical; /* Allow vertical resizing */
+      }
+      /* Adjust font sizes and padding for mobile */
+      @media (max-width: 576px) {
+        .card {
+          padding: 1.5rem;
+        }
+        h3 {
+          font-size: 1.25rem; /* Smaller heading on mobile */
+        }
+        .form-label {
+          font-size: 0.9rem;
+        }
+        #job_desc {
+          min-height: 120px; /* Slightly smaller for mobile */
+        }
+        .btn {
+          font-size: 0.9rem;
+          padding: 0.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-light">
+    <div class="main-container">
+      <div class="col-12 col-md-6 col-xl-4">
+        <div class="card p-4">
+          <h3 class="text-center mb-3">Submit Job Description</h3>
+          {% if error %}
+          <div class="alert alert-danger">{{ error }}</div>
+          {% endif %}
+          <form method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="job_desc" class="form-label">Job Description</label>
+              <textarea id="job_desc" name="job_desc" class="form-control" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="resume" class="form-label">Upload Resume (Optional, .docx or .pdf)</label>
+              <input type="file" id="resume" name="resume" class="form-control" accept=".docx,.pdf" />
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Get Suggestions</button>
+          </form>
+          <p class="text-center mt-3"><a href="/dashboard">Back to Dashboard</a></p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resume Suggestions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.28.0/docxtemplater.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+      /* Ensure the container takes full height but allows scrolling */
+      .main-container {
+        min-height: 100vh;
+      
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        justify-items: center;
+        align-items: center;
+        padding: 1rem;
+      }
+      /* Responsive card width */
+      .card {
+        width: 100%;
+        max-width: 800px; /* Limit max width for larger screens */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+      }
+      /* Scrollable and editable textarea */
+      #suggestions {
+        max-height: calc(100vh - 220px); /* Adjust for header/buttons */
+        min-height: 150px; /* Minimum height for mobile */
+        overflow-y: auto;
+        padding: 15px;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+       
+        resize: vertical;
+        font-family: inherit;
+      }
+      /* Hidden div for PDF generation */
+      #pdf-content {
+        position: absolute;
+        left: -9999px;
+        width: 100%;
+        padding: 15px;
+      }
+      /* Adjust for mobile */
+      @media (max-width: 576px) {
+        .card {
+          padding: 1.5rem;
+        }
+        h3 {
+          font-size: 1.25rem; /* Smaller heading */
+        }
+        #suggestions {
+          max-height: calc(100vh - 180px); /* Tighter fit for mobile */
+          min-height: 120px;
+        }
+        .btn {
+          font-size: 0.9rem;
+          padding: 0.5rem;
+          margin-bottom: 0.5rem; /* Stack buttons vertically */
+        }
+        .text-center .me-2 {
+          margin-right: 0 !important; /* Remove horizontal margin */
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-light w-100">
+    <div class="main-container">
+      <div class="col-12 col-md-6">
+        <div class="card p-4">
+          <h3 class="text-center mb-3">Resume Enhancement Suggestions</h3>
+          <div id="suggestions" class="mb-3">{{ suggestions | safe }}</div>
+          <div id="pdf-content"></div>
+          <div class="text-center">
+            <button onclick="downloadPDF()" class="btn btn-primary me-2">Download as PDF</button>
+            <button onclick="downloadDocx()" class="btn btn-primary">Download as DOCX</button>
+          </div>
+          <p class="text-center mt-3"><a href="/dashboard">Back to Dashboard</a></p>
+        </div>
+      </div>
+    </div>
+    <script>
+      function downloadPDF() {
+        const textarea = document.getElementById("suggestions");
+        const pdfContent = document.getElementById("pdf-content");
+        pdfContent.innerHTML = textarea.value;
+        html2pdf()
+          .from(pdfContent)
+          .set({
+            filename: "resume_suggestions.pdf",
+            margin: 0.5,
+            jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+          })
+          .save();
+      }
+
+      function downloadDocx() {
+        const content = document.getElementById("suggestions").value;
+        const doc = new docxtemplater(new JSZip());
+        const blob = new Blob([`<html><body>${content}</body></html>`], {
+          type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        });
+        saveAs(blob, "resume_suggestions.docx");
+      }
+    </script>
+  </body>
+</html>
