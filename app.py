@@ -98,8 +98,9 @@ def submit():
             You are a job description analyzer, your work is to extract the skills and knowledge 
             needed for the job and help the candidate by making his resume suitable for the job inform of html tags or markups ,
             make sure the resume is well formated and easy to read make sure to have points like resume header , skills , 
-            experience (optional), achievments , education , profesional summary also include a suggestion point at the very end of the resume
-            . do not include any other information or text.
+            experience (optional), achievments , education , profesional summary when needed also make sure to include a suggestion point at the very end of the resume
+            .
+            do not include any other information or text.
             **Job Description**:
             {job_desc}
             **Resume** (if provided):
