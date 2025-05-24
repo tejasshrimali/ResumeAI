@@ -6,12 +6,17 @@ import docx
 import PyPDF2
 import os
 import re
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # Initialize Firebase Admin SDK
 cred = credentials.Certificate("diems-cse-firebase-adminsdk-148re-4fb00b91fc.json")
 firebase_admin.initialize_app(cred)
 
 # Configure Gemini API
-GEMINI_API_KEY = "AIzaSyAdK4osW5WLVyn7WgafjXmCP8wNqua0ILs"  # Replace with your Gemini API key
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")  # Replace with your Gemini API key
 genai.configure(api_key=GEMINI_API_KEY)
 
 app = Flask(__name__)
