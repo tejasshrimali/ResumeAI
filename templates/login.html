@@ -1,0 +1,105 @@
+<!-- templates/login.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="flex-column d-flex justify-content-center align-items-center vh-100 bg-light">
+      <div class="container-sm col-xl-4 ">
+          <h3 class="text-center mb-3 fw-bold mb-5">Login</h3>
+        <div class="card p-4 shadow">
+        
+          <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="mb-3">
+              <label>Email</label>
+              <input type="email" id="email" class="form-control" required />
+            </div>
+            <div class="mb-3">
+              <label>Password</label>
+              <input type="password" id="password" class="form-control" required />
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+          </form>
+          <div class="text-center mt-3">
+            <p>Or login with:</p>
+            <button id="googleSignIn" class="btn btn-outline-primary w-100">
+              <img src="https://www.google.com/favicon.ico" alt="Google" style="width: 20px; margin-right: 10px" />
+              Login with Google
+            </button>
+          </div>
+          <p class="text-center mt-2">Don't have an account? <a href="/register">Sign Up</a></p>
+        </div>
+      </div>
+    </div>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+      import {
+        getAuth,
+        signInWithEmailAndPassword,
+        signInWithPopup,
+        GoogleAuthProvider,
+      } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+
+      // Your Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBt_eZJYZ7YIbB12NBots-t5RpER5Zdl1E",
+        authDomain: "diems-cse.firebaseapp.com",
+        projectId: "diems-cse",
+        storageBucket: "diems-cse.firebasestorage.app",
+        messagingSenderId: "907150983420",
+        appId: "1:907150983420:web:3749e62b87857ffb785779",
+        measurementId: "G-98TMHYX0MC",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
+
+      // Email/Password Login
+      window.handleLogin = async function (e) {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+          const userCredential = await signInWithEmailAndPassword(auth, email, password);
+          const idToken = await userCredential.user.getIdToken();
+          submitIdToken(idToken);
+        } catch (error) {
+          console.error("Login error:", error);
+          alert("Login failed: " + error.message);
+        }
+      };
+
+      // Google Sign-In
+      document.getElementById("googleSignIn").addEventListener("click", async () => {
+        try {
+          const result = await signInWithPopup(auth, provider);
+          const idToken = await result.user.getIdToken();
+          submitIdToken(idToken);
+        } catch (error) {
+          console.error("Google Sign-In error:", error);
+          alert("Google Sign-In failed: " + error.message);
+        }
+      });
+
+      // Helper function to submit ID token to /dashboard
+      function submitIdToken(idToken) {
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/dashboard";
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "id_token";
+        input.value = idToken;
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+      }
+    </script>
+  </body>
+</html>
