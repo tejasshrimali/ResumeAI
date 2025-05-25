@@ -9,14 +9,37 @@
       .main-container {
         min-height: 100vh;
         padding: 1rem;
-
       }
       .navbar {
         margin-bottom: 1.5rem;
       }
       .content {
-        
+        max-width: 800px;
         margin: 0 auto;
+      }
+      .suggestion-item {
+        padding: 1rem;
+        border-bottom: 1px solid #dee2e6;
+      }
+      .suggestion-item:last-child {
+        border-bottom: none;
+      }
+      .suggestion-preview {
+        max-height: 3rem; /* Limit height to ~2 lines */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: #6c757d;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+      .resume_container {
+        max-height: calc(100vh - 220px);
+        min-height: 150px;
+        overflow-y: auto;
+        padding: 15px;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
       }
       @media (max-width: 576px) {
         .navbar-brand {
@@ -25,6 +48,9 @@
         .nav-link {
           font-size: 0.9rem;
           padding: 0.5rem;
+        }
+        h2 {
+          font-size: 1.5rem;
         }
         h4 {
           font-size: 1.25rem;
@@ -37,6 +63,12 @@
           padding: 0.5rem;
           margin-bottom: 0.5rem;
         }
+        .suggestion-item {
+          padding: 0.75rem;
+        }
+        .suggestion-preview {
+          max-height: 2.5rem; /* Slightly smaller for mobile */
+        }
       }
     </style>
   </head>
@@ -45,7 +77,15 @@
       <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">Resume AI</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarNav">
@@ -71,8 +111,22 @@
           <a href="/logout" class="btn btn-secondary">Logout</a>
         </div>
         <h4>Your Saved Resumes</h4>
-        <p>No saved resumes yet. Submit a job description to get started!</p>
-        <!-- Add saved resume display logic here if implemented -->
+        <div class="resume_container">
+          {% if suggestions %}
+          <div class="card shadow-sm">
+            {% for suggestion in suggestions %}
+            <a href="{{ url_for('view_suggestion', suggestion_id=suggestion.id) }}" class="text-decoration-none">
+              <div class="suggestion-item">
+                <strong>Saved on {{ suggestion.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</strong>
+                <div class="suggestion-preview">{{ suggestion.suggestions | safe }}</div>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+          {% else %}
+          <p>No saved resumes yet. Submit a job description to get started!</p>
+          {% endif %}
+        </div>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

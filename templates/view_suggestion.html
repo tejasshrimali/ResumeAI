@@ -3,12 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Resume Suggestions</title>
+    <title>View Suggestion</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.28.0/docxtemplater.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pizzip@3.2.0/dist/pizzip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
       .main-container {
         min-height: 100vh;
@@ -25,7 +22,7 @@
         display: flex;
         flex-direction: column;
       }
-      #suggestions {
+      #suggestion-content {
         max-height: calc(100vh - 220px);
         min-height: 150px;
         overflow-y: auto;
@@ -46,7 +43,7 @@
         h3 {
           font-size: 1.25rem;
         }
-        #suggestions {
+        #suggestion-content {
           max-height: calc(100vh - 180px);
           min-height: 120px;
         }
@@ -65,52 +62,47 @@
     <div class="main-container">
       <div class="col-12 col-md-6">
         <div class="card p-4">
-          <h3 class="text-center mb-3">Resume Enhancement Suggestions</h3>
-          <div id="suggestions" class="mb-3">{{ suggestions | safe }}</div>
+          <h3 class="text-center mb-3">Resume Suggestion</h3>
+          <div id="suggestion-content" class="mb-3">{{ suggestion | safe }}</div>
           <div id="pdf-content"></div>
           <div class="text-center">
             <button onclick="downloadPDF()" class="btn btn-primary me-2">Download as PDF</button>
-            <button onclick="downloadDocx()" class="btn btn-primary">Download as DOCX</button>
-            <button class="btn btn-success" onclick="saveSuggestions()">Save Resume</button>
-
-            <a href="/submit"><button class="btn btn-danger text-white">Regenerate</button></a>
+            <button onclick="deleteSuggestion()" class="btn btn-danger me-2">Delete</button>
           </div>
           <p class="text-center mt-3"><a href="/dashboard">Back to Dashboard</a></p>
         </div>
       </div>
     </div>
     <script>
-      function saveSuggestions() {
-        const content = document.getElementById("suggestions").innerHTML;
-        fetch('/save_suggestions', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ suggestions: content })
-        })
-        .then(response => response.json())
-        .then(data => alert(data.message))
-        .catch(error => alert("Failed to save suggestions: " + error));
-      }
-
       function downloadPDF() {
-        const suggestions = document.getElementById("suggestions");
+        const content = document.getElementById("suggestion-content");
+        const pdfContent = document.getElementById("pdf-content");
+        pdfContent.innerHTML = content.innerHTML;
         html2pdf()
-          .from(suggestions.innerHTML)
+          .from(pdfContent)
           .set({
-            filename: "resume_suggestions.pdf",
-            margin: 1.5,
+            filename: "resume_suggestion.pdf",
+            margin: 0.5,
+            jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
           })
-
           .save();
       }
 
-      function downloadDocx() {
-        const content = document.getElementById("suggestions").innerHTML;
-        const doc = new docxtemplater(new PizZip());
-        const blob = new Blob([`<html><body>${content}</body></html>`], {
-          type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        });
-        saveAs(blob, "resume_suggestions.docx");
+      function deleteSuggestion() {
+        if (confirm("Are you sure you want to delete this suggestion?")) {
+          fetch('/delete_suggestion/{{ suggestion_id }}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+          })
+          .then(response => response.json())
+          .then(data => {
+            alert(data.message);
+            if (data.message.includes("successfully")) {
+              window.location.href = '/dashboard';
+            }
+          })
+          .catch(error => alert("Failed to delete suggestion: " + error));
+        }
       }
     </script>
   </body>

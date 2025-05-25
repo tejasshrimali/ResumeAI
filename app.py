@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for , jsonify
 import firebase_admin
-from firebase_admin import credentials, auth
+from firebase_admin import credentials, auth , firestore
 import google.generativeai as genai
 import docx
 import PyPDF2
@@ -14,7 +14,7 @@ load_dotenv()
 # Initialize Firebase Admin SDK
 cred = credentials.Certificate("diems-cse-firebase-adminsdk-148re-4fb00b91fc.json")
 firebase_admin.initialize_app(cred)
-
+db = firestore.client()
 # Configure Gemini API
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")  # Replace with your Gemini API key
 genai.configure(api_key=GEMINI_API_KEY)
@@ -46,32 +46,6 @@ def login():
 @app.route("/register")
 def register():
     return render_template("register.html")
-
-@app.route("/dashboard", methods=["GET", "POST"])
-def dashboard():
-    if request.method == "POST":
-        id_token = request.form.get("id_token")
-        display_name = request.form.get("display_name", "User")
-        try:
-            decoded_token = auth.verify_id_token(id_token)
-            uid = decoded_token["uid"]
-            session["user"] = uid
-            session["display_name"] = display_name
-            return render_template("dashboard.html", user_id=uid, display_name=display_name)
-        except auth.InvalidIdTokenError:
-            print("Invalid ID token")
-            return "Unauthorized: Invalid ID token", 401
-        except auth.ExpiredIdTokenError:
-            print("Expired ID token")
-            return "Unauthorized: ID token expired", 401
-        except Exception as e:
-            print(f"Error verifying token: {str(e)}")
-            return f"Unauthorized: {str(e)}", 401
-    else:
-        if "user" in session:
-            display_name = session.get("display_name", "User")
-            return render_template("dashboard.html", user_id=session["user"], display_name=display_name)
-        return redirect(url_for("login"))
 
 @app.route("/logout")
 def logout():
@@ -132,5 +106,89 @@ def result():
     suggestions = session.get("suggestions", "<p>No suggestions available.</p>")
     return render_template("result.html", suggestions=suggestions)
 
+@app.route("/save_suggestions", methods=["POST"])
+def save_suggestions():
+    if "user" not in session:
+        return jsonify({"message": "Unauthorized: Please log in"}), 401
+    
+    try:
+        data = request.get_json()
+        suggestions = data.get("suggestions")
+        if not suggestions:
+            return jsonify({"message": "No suggestions provided"}), 400
+        
+        # Save to Firestore under user's collection
+        user_id = session["user"]
+        db.collection("users").document(user_id).collection("suggestions").add({
+            "suggestions": suggestions,
+            "timestamp": firestore.SERVER_TIMESTAMP
+        })
+        return jsonify({"message": "Suggestions saved successfully"})
+    except Exception as e:
+        print(f"Error saving suggestions: {str(e)}")
+        return jsonify({"message": f"Failed to save: {str(e)}"}), 500
+
+@app.route("/dashboard", methods=["GET", "POST"])
+def dashboard():
+    if request.method == "POST":
+        id_token = request.form.get("id_token")
+        display_name = request.form.get("display_name", "User")
+        try:
+            decoded_token = auth.verify_id_token(id_token)
+            uid = decoded_token["uid"]
+            session["user"] = uid
+            session["display_name"] = display_name
+        except auth.InvalidIdTokenError:
+            print("Invalid ID token")
+            return "Unauthorized: Invalid ID token", 401
+        except auth.ExpiredIdTokenError:
+            print("Expired ID token")
+            return "Unauthorized: ID token expired", 401
+        except Exception as e:
+            print(f"Error verifying token: {str(e)}")
+            return f"Unauthorized: {str(e)}", 401
+    if "user" not in session:
+        return redirect(url_for("login"))
+    
+    # Fetch saved suggestions from Firestore
+    user_id = session["user"]
+    suggestions_ref = db.collection("users").document(user_id).collection("suggestions")
+    suggestions = [
+        {"id": doc.id, "suggestions": doc.to_dict().get("suggestions"), "timestamp": doc.to_dict().get("timestamp")}
+        for doc in suggestions_ref.order_by("timestamp", direction=firestore.Query.DESCENDING).stream()
+    ]
+    display_name = session.get("display_name", "User")
+    return render_template("dashboard.html", user_id=user_id, display_name=display_name, suggestions=suggestions)
+
+@app.route("/view_suggestion/<suggestion_id>")
+def view_suggestion(suggestion_id):
+    if "user" not in session:
+        return redirect(url_for("login"))
+    
+    try:
+        user_id = session["user"]
+        suggestion_doc = db.collection("users").document(user_id).collection("suggestions").document(suggestion_id).get()
+        if not suggestion_doc.exists:
+            return "Suggestion not found", 404
+        suggestion_data = suggestion_doc.to_dict()
+        return render_template("view_suggestion.html", suggestion=suggestion_data.get("suggestions"), suggestion_id=suggestion_id)
+    except Exception as e:
+        print(f"Error fetching suggestion: {str(e)}")
+        return f"Error: {str(e)}", 500
+
+@app.route("/delete_suggestion/<suggestion_id>", methods=["POST"])
+def delete_suggestion(suggestion_id):
+    if "user" not in session:
+        return jsonify({"message": "Unauthorized: Please log in"}), 401
+    
+    try:
+        user_id = session["user"]
+        db.collection("users").document(user_id).collection("suggestions").document(suggestion_id).delete()
+        return jsonify({"message": "Suggestion deleted successfully"})
+    except Exception as e:
+        print(f"Error deleting suggestion: {str(e)}")
+        return jsonify({"message": f"Failed to delete: {str(e)}"}), 500
+
+# ... (rest of your existing app.py code)
 if __name__ == '__main__':
     app.run(debug=True)
