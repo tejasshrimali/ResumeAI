@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Resume Enhancer</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+    <style>
+        /* Animated Gradient Background */
+        
+        body {
+            margin: 0;
+            font-family: 'Montserrat', Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(120deg, #6a11cb, #2575fc, #ffd700, #6a11cb);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
+            color: #fff;
+        }
+        
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            text-align: center;
+            animation: fadeIn 1.5s;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            line-height: 1.1;
+            background: linear-gradient(90deg, #ffd700 30%, #fff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .highlight {
+            color: #ffd700;
+            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+        }
+        
+        p {
+            font-size: 1.25rem;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            color: #f0f8ff;
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.12);
+        }
+        /* Animated Button */
+        
+        .cta-btn {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(90deg, #ffd700 40%, #fff 100%);
+            color: #2575fc;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 32px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .cta-btn:hover {
+            transform: scale(1.07);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.20);
+        }
+        /* Ripple Effect */
+        
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            background-color: rgba(37, 117, 252, 0.4);
+            pointer-events: none;
+        }
+        
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        /* Features Section */
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 60px;
+        }
+        
+        .feature {
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 18px;
+            padding: 32px 24px;
+            width: 260px;
+            box-shadow: 0 2px 14px rgba(0, 0, 0, 0.10);
+            transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeInCard 1.2s forwards;
+        }
+        
+        .feature:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+        
+        .feature:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+        
+        .feature:nth-child(3) {
+            animation-delay: 0.8s;
+        }
+        
+        @keyframes fadeInCard {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .feature:hover {
+            transform: scale(1.06) translateY(-8px);
+            background: rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+        }
+        
+        .feature h3 {
+            color: #ffd700;
+            margin-bottom: 10px;
+            font-size: 1.35rem;
+        }
+        
+        .feature p {
+            color: #fffde7;
+            font-size: 1rem;
+        }
+        
+        @media (max-width: 700px) {
+            h1 {
+                font-size: 2.1rem;
+            }
+            .features {
+                flex-direction: column;
+                align-items: center;
+            }
+            .feature {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>
+            <span class="highlight">Smart Resume Enhancer</span><br> Land Your Dream Job with a Standout Resume!
+        </h1>
+        <p>
+            Struggling to make your resume shine?<br> Our intelligent tool analyzes job descriptions and gives you personalized suggestions to highlight your strengths, align your skills, and impress recruiters.
+        </p>
+        <button class="cta-btn" id="ctaBtn" onclick="window.location.href='#get-started'">Get Started Now</button>
+        <div class="features">
+            <div class="feature">
+                <h3>AI-Powered Analysis</h3>
+                <p>Upload your resume and job description. Let our AI instantly pinpoint gaps and suggest improvements.</p>
+            </div>
+            <div class="feature">
+                <h3>Personalized Tips</h3>
+                <p>Receive actionable feedback tailored to your unique skills and career goals.</p>
+            </div>
+            <div class="feature">
+                <h3>Boost Success</h3>
+                <p>Stand out from the crowd and increase your chances of landing interviews with a competitive resume.</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Ripple effect for button
+        document.getElementById('ctaBtn').addEventListener('click', function(e) {
+            const btn = this;
+            const circle = document.createElement('span');
+            circle.classList.add('ripple');
+            const rect = btn.getBoundingClientRect();
+            circle.style.width = circle.style.height = Math.max(rect.width, rect.height) + 'px';
+            circle.style.left = e.clientX - rect.left - rect.width / 2 + 'px';
+            circle.style.top = e.clientY - rect.top - rect.height / 2 + 'px';
+            btn.appendChild(circle);
+            setTimeout(() => circle.remove(), 600);
+        });
+    </script>
+</body>
+
+</html>
