@@ -4,225 +4,186 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smart Resume Enhancer</title>
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
-      /* Animated Gradient Background */
-
       body {
-        margin: 0;
-        font-family: "Montserrat", Arial, sans-serif;
-        min-height: 100vh;
-        background: linear-gradient(120deg, #6a11cb, #2575fc, #ffd700, #6a11cb);
-        background-size: 400% 400%;
-        animation: gradientBG 12s ease infinite;
-        color: #fff;
+        font-family: "Segoe UI", sans-serif;
+        background-color: #f8f9fa;
+        color: #212529;
       }
 
-      @keyframes gradientBG {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
-      }
-
-      .container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 60px 20px;
+      .hero {
+        padding: 80px 0;
+        background-color: #ffffff;
         text-align: center;
-        animation: fadeIn 1.5s;
+        border-bottom: 1px solid #dee2e6;
       }
 
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(40px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      h1 {
-        font-size: 3rem;
+      .hero h1 {
+        font-size: 2.8rem;
+        font-weight: 600;
         margin-bottom: 20px;
-        font-weight: 700;
-        letter-spacing: 1px;
-        line-height: 1.1;
-        background: linear-gradient(90deg, #ffd700 30%, #fff 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
       }
 
-      .highlight {
-        color: #ffd700;
-        text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
-      }
-
-      p {
-        font-size: 1.25rem;
-        margin-bottom: 40px;
-        line-height: 1.6;
-        color: #f0f8ff;
-        text-shadow: 0 1px 6px rgba(0, 0, 0, 0.12);
-      }
-      /* Animated Button */
-
-      .cta-btn {
-        position: relative;
-        overflow: hidden;
-        background: linear-gradient(90deg, #ffd700 40%, #fff 100%);
-        color: #2575fc;
-        padding: 18px 40px;
-        border: none;
-        border-radius: 32px;
+      .hero p {
         font-size: 1.2rem;
-        font-weight: bold;
-        cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        color: #6c757d;
+        margin-bottom: 30px;
       }
 
-      .cta-btn:hover {
-        transform: scale(1.07);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-      }
-      /* Ripple Effect */
-
-      .ripple {
-        position: absolute;
-        border-radius: 50%;
-        transform: scale(0);
-        animation: ripple 0.6s linear;
-        background-color: rgba(37, 117, 252, 0.4);
-        pointer-events: none;
+      .btn-primary {
+        padding: 12px 32px;
+        font-size: 1.1rem;
+        border-radius: 50px;
+        font-weight: 500;
       }
 
-      @keyframes ripple {
-        to {
-          transform: scale(4);
-          opacity: 0;
-        }
+      .section-title {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 40px;
       }
-      /* Features Section */
 
+      .why-section,
+      .steps-section,
       .features {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 30px;
-        justify-content: center;
-        margin-top: 60px;
+        padding: 60px 0;
       }
 
-      .feature {
-        background: rgba(255, 255, 255, 0.12);
-        border-radius: 18px;
-        padding: 32px 24px;
-        width: 260px;
-        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
-        opacity: 0;
-        transform: translateY(40px);
-        animation: fadeInCard 1.2s forwards;
+      .feature-card {
+        background: #ffffff;
+        border: 1px solid #e3e6ea;
+        border-radius: 12px;
+        padding: 30px;
+        transition: all 0.2s ease;
+        height: 100%;
       }
 
-      .feature:nth-child(1) {
-        animation-delay: 0.2s;
+      .feature-card:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        transform: translateY(-4px);
       }
 
-      .feature:nth-child(2) {
-        animation-delay: 0.5s;
+      .feature-card h5 {
+        font-size: 1.25rem;
+        margin-bottom: 12px;
+        font-weight: 600;
       }
 
-      .feature:nth-child(3) {
-        animation-delay: 0.8s;
-      }
-
-      @keyframes fadeInCard {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .feature:hover {
-        transform: scale(1.06) translateY(-8px);
-        background: rgba(255, 255, 255, 0.18);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
-      }
-
-      .feature h3 {
-        color: #ffd700;
+      .step-icon {
+        font-size: 2rem;
+        color: #0d6efd;
         margin-bottom: 10px;
-        font-size: 1.35rem;
       }
 
-      .feature p {
-        color: #fffde7;
-        font-size: 1rem;
-      }
-
-      @media (max-width: 700px) {
-        h1 {
-          font-size: 2.1rem;
-        }
-        .features {
-          flex-direction: column;
-          align-items: center;
-        }
-        .feature {
-          width: 90%;
-        }
+      .footer {
+        background-color: #f1f3f5;
+        padding: 30px 0;
+        font-size: 0.9rem;
+        text-align: center;
+        color: #6c757d;
       }
     </style>
   </head>
 
   <body>
-    <div class="container">
-      <h1>
-        <span class="highlight">Smart Resume Enhancer</span><br />
-        Land Your Dream Job with a Standout Resume!
-      </h1>
-      <p>
-        Struggling to make your resume shine?<br />
-        Our intelligent tool analyzes job descriptions and gives you personalized suggestions to highlight your
-        strengths, align your skills, and impress recruiters.
-      </p>
-      <a href="dashboard" class="cta-btn" id="ctaBtn">Get Started Now</a>
-      <div class="features">
-        <div class="feature">
-          <h3>AI-Powered Analysis</h3>
-          <p>Upload your resume and job description. Let our AI instantly pinpoint gaps and suggest improvements.</p>
-        </div>
-        <div class="feature">
-          <h3>Personalized Tips</h3>
-          <p>Receive actionable feedback tailored to your unique skills and career goals.</p>
-        </div>
-        <div class="feature">
-          <h3>Boost Success</h3>
-          <p>Stand out from the crowd and increase your chances of landing interviews with a competitive resume.</p>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <h1>AI Resume Enhancer</h1>
+        <p>AI-powered suggestions to tailor your resume for any job description — faster, better, smarter.</p>
+        <a href="dashboard" class="btn btn-primary">Get Started</a>
+      </div>
+    </section>
+
+    <!-- Why Section -->
+    <section class="why-section bg-light">
+      <div class="container">
+        <h2 class="section-title">Why Use Smart Resume Enhancer?</h2>
+        <div class="row g-4 align-items-center">
+         
+          <div class="col-md-6">
+            <p class="lead">
+              Applying to jobs but not getting interviews? Recruiters spend only seconds skimming resumes.
+            </p>
+            <ul class="list-unstyled">
+              <li>✔️ Your resume may be missing key terms from the job description.</li>
+              <li>✔️ Manual tailoring takes time — and guesswork.</li>
+              <li>✔️ Our AI bridges that gap, making your resume stand out effortlessly.</li>
+              <li>✔️ Receive structured, role-specific suggestions in seconds, not hours.</li>
+              <li>✔️ Improve your chances of getting shortlisted — backed by data-driven analysis.</li>
+              <li>✔️ No design or writing skills needed — focus on content.</li>
+              <li>✔️ Save your personalized resumes or export them instantly in PDF format.</li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
-    <script>
-      // Ripple effect for button
-      document.getElementById("ctaBtn").addEventListener("click", function (e) {
-        const btn = this;
-        const circle = document.createElement("span");
-        circle.classList.add("ripple");
-        const rect = btn.getBoundingClientRect();
-        circle.style.width = circle.style.height = Math.max(rect.width, rect.height) + "px";
-        circle.style.left = e.clientX - rect.left - rect.width / 2 + "px";
-        circle.style.top = e.clientY - rect.top - rect.height / 2 + "px";
-        btn.appendChild(circle);
-        setTimeout(() => circle.remove(), 600);
-      });
-    </script>
+    </section>
+
+    <!-- Steps Section -->
+    <section class="steps-section">
+      <div class="container">
+        <h2 class="section-title">How It Works</h2>
+        <div class="row text-center g-4">
+          <div class="col-md-3">
+            <div class="step-icon">👤</div>
+            <h6>Login / Sign Up</h6>
+            <p>Create an account to personalize your resume enhancement experience.</p>
+          </div>
+          <div class="col-md-3">
+            <div class="step-icon">📝</div>
+            <h6>Submit Job Description</h6>
+            <p>Paste the job listing to let our AI analyze what recruiters are seeking.</p>
+          </div>
+          <div class="col-md-3">
+            <div class="step-icon">⚙️</div>
+            <h6>Get Suggestions</h6>
+            <p>Receive bullet-pointed skills, keywords, and experiences you should include.</p>
+          </div>
+          <div class="col-md-3">
+            <div class="step-icon">📄</div>
+            <h6>Save / Download PDF</h6>
+            <p>Apply instantly or export suggestions to a professionally formatted PDF.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features bg-light">
+      <div class="container">
+        <h2 class="section-title">Key Features</h2>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="feature-card h-100">
+              <h5>AI-Powered Matching</h5>
+              <p>Analyze job descriptions and generate personalized improvements for your resume instantly.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="feature-card h-100">
+              <h5>Skill Gap Insights</h5>
+              <p>
+                Discover missing keywords and technical skills recruiters are scanning for — and add them effectively.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="feature-card h-100">
+              <h5>Modern Resume Suggestions</h5>
+              <p>Get highly useful suggestion's based on the job description!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">&copy; 2025 Smart Resume Enhancer. All rights reserved.</div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
