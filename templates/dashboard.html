@@ -117,7 +117,7 @@
             {% for suggestion in suggestions %}
             <a href="{{ url_for('view_suggestion', suggestion_id=suggestion.id) }}" class="text-decoration-none">
               <div class="suggestion-item">
-                <strong>Saved on {{ suggestion.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</strong>
+                <strong>Saved on {{ suggestion.timestamp.strftime('%Y-%m-%d') }}</strong>
                 <div class="suggestion-preview">{{ suggestion.suggestions | safe }}</div>
               </div>
             </a>
