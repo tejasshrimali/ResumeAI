@@ -64,7 +64,7 @@
         <div class="card p-4">
           <h3 class="text-center mb-3">Resume Suggestion</h3>
           <div id="suggestion-content" class="mb-3">{{ suggestion | safe }}</div>
-          <div id="pdf-content"></div>
+         
           <div class="text-center">
             <button onclick="downloadPDF()" class="btn btn-primary me-2">Download as PDF</button>
             <button onclick="deleteSuggestion()" class="btn btn-danger me-2">Delete</button>
@@ -75,11 +75,11 @@
     </div>
     <script>
       function downloadPDF() {
-        const content = document.getElementById("suggestion-content");
-        const pdfContent = document.getElementById("pdf-content");
-        pdfContent.innerHTML = content.innerHTML;
+        const content = document.getElementById("suggestion-content").innerHTML;
+      
+    
         html2pdf()
-          .from(pdfContent)
+          .from(content)
           .set({
             filename: "resume_suggestion.pdf",
             margin: 0.5,
