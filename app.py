@@ -16,7 +16,7 @@ cred = credentials.Certificate("diems-cse-firebase-adminsdk-148re-4fb00b91fc.jso
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 # Configure Gemini API
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")  # Replace with your Gemini API key
+GEMINI_API_KEY = "AIzaSyB6zOY1SaG7d0c2vWFVHFFzrHF-HP98iog" # Replace with your Gemini API key
 genai.configure(api_key=GEMINI_API_KEY)
 
 app = Flask(__name__)
